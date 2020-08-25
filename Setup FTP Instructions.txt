@@ -1,0 +1,57 @@
+IF ANY OF THE FILES YOU ARE UPLOADING CONFLICT WITH YOUR SHOPS NAMING CONVENTIONS
+     YOU SHOULD RENAME THE FILES BEFORE UPLOADING - AND ADJUST THE DSNAMES
+	IN THE JCL - AND THROUGHOUT THE COURSE
+================================================================================
+
+1. Allocate the following TSO Libraries/PDSE:
+   &SYSUID.LEARN.COBOL:     80 Byte/LRECL/TRKS: 10,10,30
+   &SYSUID.LEARN.JCL:       80 Byte/LRECL/TRKS: 5,5,5
+   &SYSUID.LEARN.LISTING:   133 Byte Byte/LRECL/TRKS: 10,10,30
+   &SYSUID.LEARN.LOAD:      RECFM=U, BLKSIZE: 4096/TRKS: 10, 10, 30
+     Plus any other Datasets need for Compile/Link on your LPAR
+          i.e.  COPYLIB, OBJLIB, SYSDEBUG, etc.
+
+2. FTP up the source files:
+   COBOL programs => TSOID.LEARN.COBOL - 48 sample programs used in class
+   JCL files => TSOID.LEARN.JCL - 2 sample files which you will have to replace:
+	- COBUCLG - Either modify or just wholescale change to your PROC
+	- COBUCLD - Compile/Link & Debug. While Debugging is not entirely
+			necessary for class, it helps to flatten the
+			COBOL learning curve + it promotes Best Practices
+
+3. FTP up the following sequential Data Sets
+   &SYSUID.LEARN.ACCT.DATA:      FB 170 Byte/LRECL/Sequential/TRKS:  1,1
+   &SYSUID.LEARN.B37:            FB 80  Byte/LRECL/Sequential/TRKS:  1,1
+   &SYSUID.LEARN.FAVIN:          FB 80  Byte/LRECL/Sequential/TRKS:  1,1
+   &SYSUID.LEARN.INSCLAIM:       FB 90  Byte/LRECL/Sequential/TRKS:  1,1
+   &SYSUID.LEARN.INVALS:         FB 80  Byte/LRECL/Sequential/TRKS:  1,1
+   &SYSUID.LEARN.OUTFILE         FB 178 Byte/LRECL/Sequential/TRKS:  1,1
+   &SYSUID.LEARN.PAYCHECK.DATA   FB 80  Byte/LRECL/Sequential/TRKS:  1,1
+   &SYSUID.LEARN.PAYROL01        FB 80  Byte/LRECL/Sequential/TRKS:  1,1
+   &SYSUID.LEARN.PAYROL3A	 FB 90  Byte/LRECL/Sequential/TRKS:  1,1 
+
+4. Modify both JCL files in &SYSUID.LEARN.JCL
+   A job card to run on your z/OS batch system
+   A Compile/Link/Run PROC
+   The RUN step will need the following DD cards appended:
+     //ACCTREC  DD DSN=DDS0001.LEARN.ACCT.DATA,DISP=SHR
+     //PRTLINE  DD SYSOUT=*
+     //PAYROLL  DD DSN=&SYSUID..LEARN.PAYROL01,DISP=SHR
+     //INFILE   DD DSN=&SYSUID..LEARN.ACCT,DISP=SHR
+     //OUTFILE  DD DSN=&SYSUID..LEARN.OUTFILE,DISP=SHR
+     //INVALS   DD DSN=DDS0001.LEARN.INVALS,DISP=SHR
+     //PAYCHECK DD SYSOUT=*
+     //FAVIN    DD DSN=&SYSUID..LEARN.FAVIN,DISP=SHR
+     //B37      DD DSN=&SYSUID..LEARN.B37,DISP=SHR
+     //CLAIM    DD DSN=&SYSUID..LEARN.INSCLAIM,DISP=SHR
+     //CLAIMRPT DD SYSOUT=*
+
+5. If you're using ZOD or IDz
+	Allocate the Libraries (PDS files) on the mainframe - as specified
+	Select the 2 JCL programs - and drag & drop onto <tsoid>.LEARN.COBOL
+	Select the 48 COBOL programs - and drag & drop onto <tsoid>.LEARN.JCL
+	Select each sequential file - drag & drop it on top of  the:  My Data Sets   filter
+	   You will be prompted to allocate file space, etc. 
+	For the JCL - you will have to create or copy a Compile/Link/Go JCL file - and a Compile/Link/Debug file (if you have a Debugger on your system)
+    Note also that your Compile/Link/Go JCL will need additional data sets
+	*.OBJ  - perhaps others. You will have to consult with colleagues about this
