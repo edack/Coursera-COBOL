@@ -292,7 +292,7 @@
                MOVE 1                      TO LINE-SPACEING
                MOVE TRAILER-LINE-2         TO NEXT-REPORT-LINE
                PERFORM 9000-PRINT-REPORT-LINE
-               MOVE 2                      TO LINE-SPACEING
+               MOVE 1                      TO LINE-SPACEING
                PERFORM 3200-PRINT-OVERLIMIT-DETAIL
                    VARYING INDEX-1 FROM 1 BY 1
                    UNTIL INDEX-1 > OVERLIMIT-COUNT.
